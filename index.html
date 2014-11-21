@@ -1,0 +1,231 @@
+<!DOCTYPE HTML>
+<meta charset="utf-8"> 
+<title>Todo</title>
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.0/superhero/bootstrap.min.css" type="text/css" media="all" />
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.min.css" type="text/css" media="all" />
+
+<style>
+  .container-fluid {
+    margin-top: 50px;
+    margin-right: auto;
+    margin-left: auto;
+    max-width: 750px;
+  }
+  .list-group-item a i {
+    margin-left: 20px;
+  }
+  .list-group-item > p {
+    width: 65%;
+  }
+  label, h1, h2, h3, h4 {
+    font-weight: bolder;
+  }
+  .badge {
+    background-color: #2b3e50;
+  }
+</style>
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0/handlebars.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/ember.js/1.9.0-beta.1/ember.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/ember-data.js/1.0.0-beta.11/ember-data.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/ember-localstorage-adapter/0.3.1/localstorage_adapter.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/livescript/1.3.1/livescript-min.js"></script>
+
+<script type="text/x-handlebars">
+  <div class="container-fluid">
+    {{outlet}}
+  </div>
+</script>
+
+<script type="text/x-handlebars" data-template-name="newtask">
+  <h1>New Task</h1>
+  <form {{action create on="submit"}}>
+    <div class="form-group">
+			<label>Title</label>
+			{{input class="form-control" value=title required="required" autofocus="autofocus"}}
+		</div>
+    <div class="form-group">
+			<label>Project</label>
+			{{input class="form-control" value=project}}
+		</div>
+		<div class="form-group">
+			<label>Description</label>
+			{{textarea class="form-control" value=description}}
+		</div>
+		{{input class="btn btn-primary btn-lg btn-block" type="submit" value="Create"}}
+		{{#link-to 'index' class="btn btn-default btn-lg btn-block"}}Cancel{{/link-to}}
+  </form>
+</script>
+
+<script type="text/x-handlebars" data-template-name="todolist">
+  {{#link-to 'newtask' class="btn btn-primary btn-lg btn-block"}}Create New Task{{/link-to}}
+  <br><br>
+  <ul class="nav nav-tabs nav-justified">
+    {{#tab-li}}
+      {{#link-to 'todolist' 'inbox'}}
+        <i class="fa fa-inbox fa-lg"></i> Inbox
+      {{/link-to}}
+    {{/tab-li}}
+    {{#tab-li}}
+      {{#link-to 'todolist' 'next'}}
+        <i class="fa fa-exclamation-circle fa-lg text-primary"></i> Next Actions
+      {{/link-to}}
+    {{/tab-li}}
+    {{#tab-li}}
+      {{#link-to 'todolist' 'waiting'}}
+        <i class="fa fa-clock-o fa-lg text-warning"></i> Waiting For
+      {{/link-to}}
+    {{/tab-li}}
+    {{#tab-li}}
+      {{#link-to 'todolist' 'maybe'}}
+        <i class="fa fa-question-circle fa-lg text-info"></i> Maybe
+      {{/link-to}}
+    {{/tab-li}}
+    {{#tab-li}}
+      {{#link-to 'todolist' 'done'}}
+        <i class="fa fa-check-circle fa-lg text-success"></i> Done
+      {{/link-to}}
+    {{/tab-li}}
+  </ul>
+  <ul class="list-group">
+  {{#each}}
+    <li class="list-group-item" {{bind-attr id=id}}>
+      <h4 class="list-group-item-heading">
+        {{title}}
+        
+        {{#if project}}
+          <span class="badge">{{project}}</span>
+        {{/if}}
+        
+        {{#if inbox}}
+          <a class="pull-right text-info" {{action move 'maybe' this on="click"}}>
+            <i class="fa fa-question-circle fa-2x text-danger"></i>
+          </a>
+          <a class="pull-right text-warning" {{action move 'waiting' this on="click"}}>
+            <i class="fa fa-clock-o fa-2x"></i>
+          </a>
+          <a class="pull-right" {{action move 'next' this on="click"}}>
+            <i class="fa fa-exclamation-circle fa-2x"></i>
+          </a>
+        {{/if}}
+      
+        {{#if next}}
+          <a class="pull-right text-success" {{action move 'done' this on="click"}}>
+            <i class="fa fa-check-circle fa-2x"></i>
+          </a>
+          <a class="pull-right text-info" {{action move 'maybe' this on="click"}}>
+            <i class="fa fa-question-circle fa-2x"></i>
+          </a>
+          <a class="pull-right text-warning" {{action move 'waiting' this on="click"}}>
+            <i class="fa fa-clock-o fa-2x"></i>
+          </a>
+        {{/if}}
+        
+        {{#if waiting}}
+          <a class="pull-right text-success" {{action move 'done' this on="click"}}>
+            <i class="fa fa-check-circle fa-2x"></i>
+          </a>
+          <a class="pull-right text-info" {{action move 'maybe' this on="click"}}>
+            <i class="fa fa-question-circle fa-2x"></i>
+          </a>
+          <a class="pull-right" {{action move 'next' this on="click"}}>
+            <i class="fa fa-exclamation-circle fa-2x"></i>
+          </a>
+        {{/if}}
+        
+        {{#if maybe}}
+          <a class="pull-right text-danger" {{action move 'out' this on="click"}}>
+            <i class="fa fa-times-circle fa-2x"></i>
+          </a>
+          <a class="pull-right text-warning" {{action move 'waiting' this on="click"}}>
+            <i class="fa fa-clock-o fa-2x"></i>
+          </a>
+          <a class="pull-right" {{action move 'next' this on="click"}}>
+            <i class="fa fa-exclamation-circle fa-2x"></i>
+          </a>
+        {{/if}}
+        
+        {{#if done}}
+          <a class="pull-right text-danger" {{action move 'out' this on="click"}}>
+            <i class="fa fa-times-circle fa-2x"></i>
+          </a>
+          <a class="pull-right text-info" {{action move 'maybe' this on="click"}}>
+            <i class="fa fa-question-circle fa-2x"></i>
+          </a>
+          <a class="pull-right text-warning" {{action move 'waiting' this on="click"}}>
+            <i class="fa fa-clock-o fa-2x"></i>
+          </a>
+          <a class="pull-right" {{action move 'next' this on="click"}}>
+            <i class="fa fa-exclamation-circle fa-2x"></i>
+          </a>
+        {{/if}}
+      </h4>
+      <p class="list-group-item-text">{{description}} &nbsp;</p>
+    </li>
+  {{else}}
+    <li class="list-group-item">
+      <h4 class="list-group-item-heading">List Empty</h4>
+    </li>
+  {{/each}}
+  </div>
+</script>
+
+<script type="text/ls">
+App = window.App = Em.Application.create!
+
+App.ApplicationSerializer = DS.LSSerializer.extend!
+App.ApplicationAdapter = DS.LSAdapter.extend 'namespace':'todo'
+
+App.Router.map !->
+  @resource \todolist path:'/:list'
+  @route \newtask path:'/new'
+
+App.IndexRoute = Em.Route.extend do
+  before-model:->
+    @transition-to \todolist \inbox
+
+App.TodolistRoute = Em.Route.extend do
+  model:(params)->
+    @store.filter \todo, 'list':params.list, -> (it.get \list) is params.list
+
+App.TodolistController = Em.ArrayController.extend do
+  actions:move:(target-list, record)->
+    if target-list is \out
+      record.delete-record!
+      record.save!
+    else
+      record.set \list target-list .save!
+
+App.NewtaskController = Em.Controller.extend do
+  list:\inbox
+  actions:create:->
+    input = @get-properties <[title project list description dueBy]>
+    record = @store.create-record \todo input
+    record.save!
+
+    @set \title ''
+    @set \project ''
+    @set \description ''
+  
+    @transition-to \index
+
+App.Todo = DS.Model.extend do
+  title: DS.attr \string
+  description: DS.attr \string
+  project: DS.attr \string
+  list: DS.attr \string
+  inbox:(-> (@get \list) is \inbox ).property \list
+  next:(-> (@get \list) is \next ).property \list
+  waiting:(-> (@get \list) is \waiting ).property \list
+  maybe:(-> (@get \list) is \maybe ).property \list
+  done:(-> (@get \list) is \done ).property \list
+
+App.TabLiComponent = Em.Component.extend do
+  tag-name:\li
+  class-name-bindings:<[active]>
+  active:(->
+    @get \childViews .any-by \active
+  ).property \childViews.@each.active
+</script>
+<script>require("LiveScript").go()</script>
