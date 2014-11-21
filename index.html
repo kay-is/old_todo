@@ -1,6 +1,7 @@
 <!DOCTYPE HTML>
 <meta charset="utf-8"> 
 <title>Todo</title>
+
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.0/superhero/bootstrap.min.css" type="text/css" media="all" />
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.min.css" type="text/css" media="all" />
 
@@ -100,7 +101,7 @@
         
         {{#if inbox}}
           <a class="pull-right text-info" {{action move 'maybe' this on="click"}}>
-            <i class="fa fa-question-circle fa-2x text-danger"></i>
+            <i class="fa fa-question-circle fa-2x"></i>
           </a>
           <a class="pull-right text-warning" {{action move 'waiting' this on="click"}}>
             <i class="fa fa-clock-o fa-2x"></i>
