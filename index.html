@@ -35,6 +35,7 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/ember-data.js/1.0.0-beta.11/ember-data.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/ember-localstorage-adapter/0.3.1/localstorage_adapter.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/livescript/1.3.1/livescript-min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/marked/0.3.2/marked.min.js"></script>
 
 <script type="text/x-handlebars">
   <div class="container-fluid">
@@ -165,7 +166,7 @@
           </a>
         {{/if}}
       </h4>
-      <p class="list-group-item-text">{{description}} &nbsp;</p>
+      <p class="list-group-item-text">{{markdown description}} &nbsp;</p>
     </li>
   {{else}}
     <li class="list-group-item">
@@ -231,5 +232,10 @@ App.TabLiComponent = Em.Component.extend do
   active:(->
     @get \childViews .any-by \active
   ).property \childViews.@each.active
+  
+Em.Handlebars.helper \markdown ->
+ if it
+   new Em.Handlebars.SafeString marked it
+
 </script>
 <script>require("LiveScript").go()</script>
