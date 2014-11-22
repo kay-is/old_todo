@@ -133,74 +133,32 @@
     <li class="list-group-item" {{bind-attr id=id}}>
       <h4 class="list-group-item-heading">
         {{title}}
-        
-        {{#if project}}
-          <span class="badge">{{project}}</span>
-        {{/if}}
-        
-        {{#if inbox}}
-          <a class="pull-right text-info" {{action move 'maybe' this on="click"}}>
-            <i class="fa fa-question-circle fa-2x"></i>
-          </a>
-          <a class="pull-right text-warning" {{action move 'waiting' this on="click"}}>
-            <i class="fa fa-clock-o fa-2x"></i>
-          </a>
-          <a class="pull-right" {{action move 'next' this on="click"}}>
-            <i class="fa fa-exclamation-circle fa-2x"></i>
-          </a>
-        {{/if}}
-      
-        {{#if next}}
-          <a class="pull-right text-success" {{action move 'done' this on="click"}}>
-            <i class="fa fa-check-circle fa-2x"></i>
-          </a>
-          <a class="pull-right text-info" {{action move 'maybe' this on="click"}}>
-            <i class="fa fa-question-circle fa-2x"></i>
-          </a>
-          <a class="pull-right text-warning" {{action move 'waiting' this on="click"}}>
-            <i class="fa fa-clock-o fa-2x"></i>
-          </a>
-        {{/if}}
-        
-        {{#if waiting}}
-          <a class="pull-right text-success" {{action move 'done' this on="click"}}>
-            <i class="fa fa-check-circle fa-2x"></i>
-          </a>
-          <a class="pull-right text-info" {{action move 'maybe' this on="click"}}>
-            <i class="fa fa-question-circle fa-2x"></i>
-          </a>
-          <a class="pull-right" {{action move 'next' this on="click"}}>
-            <i class="fa fa-exclamation-circle fa-2x"></i>
-          </a>
-        {{/if}}
-        
-        {{#if maybe}}
+        {{#if project}}<span class="badge">{{project}}</span>{{/if}}
+        {{#if showOut}}
           <a class="pull-right text-danger" {{action move 'out' this on="click"}}>
             <i class="fa fa-times-circle fa-2x"></i>
           </a>
-          <a class="pull-right text-warning" {{action move 'waiting' this on="click"}}>
-            <i class="fa fa-clock-o fa-2x"></i>
-          </a>
-          <a class="pull-right" {{action move 'next' this on="click"}}>
-            <i class="fa fa-exclamation-circle fa-2x"></i>
+        {{/if}}
+        {{#if showDone}}
+          <a class="pull-right text-success" {{action move 'done' this on="click"}}>
+            <i class="fa fa-check-circle fa-2x"></i>
           </a>
         {{/if}}
-        
-        {{#if done}}
-          <a class="pull-right text-danger" {{action move 'out' this on="click"}}>
-            <i class="fa fa-times-circle fa-2x"></i>
-          </a>
+        {{#if showMaybe}}
           <a class="pull-right text-info" {{action move 'maybe' this on="click"}}>
             <i class="fa fa-question-circle fa-2x"></i>
           </a>
+        {{/if}}
+        {{#if showWaiting}}
           <a class="pull-right text-warning" {{action move 'waiting' this on="click"}}>
             <i class="fa fa-clock-o fa-2x"></i>
           </a>
+        {{/if}}
+        {{#if showNext}}
           <a class="pull-right" {{action move 'next' this on="click"}}>
             <i class="fa fa-exclamation-circle fa-2x"></i>
           </a>
         {{/if}}
-        
         {{#link-to "edittask" this class="edittask"}}
           <i class="pull-right fa fa-pencil-square fa-2x"></i>
         {{/link-to}}
@@ -262,15 +220,19 @@ App.EdittaskController = Em.ObjectController.extend do
     @transition-to \todolist record.get \list
 
 App.Todo = DS.Model.extend do
-  title: DS.attr \string
-  description: DS.attr \string
-  project: DS.attr \string
-  list: DS.attr \string
-  inbox:(-> (@get \list) is \inbox ).property \list
-  next:(-> (@get \list) is \next ).property \list
-  waiting:(-> (@get \list) is \waiting ).property \list
-  maybe:(-> (@get \list) is \maybe ).property \list
-  done:(-> (@get \list) is \done ).property \list
+  'title': DS.attr \string
+  'description': DS.attr \string
+  'project': DS.attr \string
+  'list': DS.attr \string
+
+  'showOut':(-> (@get \list) is \done).property \list
+  'showNext':(-> (@get \list) isnt \next).property \list
+  'showWaiting':(-> (@get \list) isnt \waiting).property \list
+  'showMaybe':(-> (@get \list) isnt \maybe).property \list
+  'showDone':(->
+    list = @get \list
+    list isnt \done and list isnt \inbox
+  ).property \list
 
 App.TabLiComponent = Em.Component.extend do
   tag-name:\li
