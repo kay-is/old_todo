@@ -39,6 +39,9 @@
   .form-control {
     font-size: 16px;
   }
+  .edittask i {
+    color: lightgrey;
+  }
 </style>
 
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
@@ -71,6 +74,26 @@
 			{{textarea class="form-control" value=description}}
 		</div>
 		{{input class="btn btn-primary btn-lg btn-block" type="submit" value="Create"}}
+		{{#link-to 'index' class="btn btn-default btn-lg btn-block"}}Cancel{{/link-to}}
+  </form>
+</script>
+
+<script type="text/x-handlebars" data-template-name="edittask">
+  <h1>Edit Task</h1>
+  <form {{action save on="submit"}}>
+    <div class="form-group">
+			<label>Title</label>
+			{{input class="form-control" value=title required="required" autofocus="autofocus"}}
+		</div>
+    <div class="form-group">
+			<label>Project</label>
+			{{input class="form-control" value=project}}
+		</div>
+		<div class="form-group">
+			<label>Description</label>
+			{{textarea class="form-control" value=description}}
+		</div>
+		{{input class="btn btn-primary btn-lg btn-block" type="submit" value="Save"}}
 		{{#link-to 'index' class="btn btn-default btn-lg btn-block"}}Cancel{{/link-to}}
   </form>
 </script>
@@ -177,6 +200,10 @@
             <i class="fa fa-exclamation-circle fa-2x"></i>
           </a>
         {{/if}}
+        
+        {{#link-to "edittask" this class="edittask"}}
+          <i class="pull-right fa fa-pencil-square fa-2x"></i>
+        {{/link-to}}
       </h4>
       <p class="list-group-item-text">{{markdown description}}</p>
     </li>
@@ -196,6 +223,7 @@ App.ApplicationAdapter = DS.LSAdapter.extend 'namespace':'todo'
 
 App.Router.map !->
   @resource \todolist path:'/:list'
+  @resource \edittask path:'/edit/:id'
   @route \newtask path:'/new'
 
 App.IndexRoute = Em.Route.extend do
@@ -207,12 +235,12 @@ App.TodolistRoute = Em.Route.extend do
     @store.filter \todo, 'list':params.list, -> (it.get \list) is params.list
 
 App.TodolistController = Em.ArrayController.extend do
-  actions:move:(target-list, record)->
+  actions:move:(target-list, task)->
     if target-list is \out
-      record.delete-record!
-      record.save!
+      task.delete-record!
+      task.save!
     else
-      record.set \list target-list .save!
+      task.set \list target-list .save!
 
 App.NewtaskController = Em.Controller.extend do
   list:\inbox
@@ -226,6 +254,12 @@ App.NewtaskController = Em.Controller.extend do
     @set \description ''
   
     @transition-to \index
+
+App.EdittaskController = Em.ObjectController.extend do
+  actions:save:->
+    record = @get \model
+    record.save!
+    @transition-to \todolist record.get \list
 
 App.Todo = DS.Model.extend do
   title: DS.attr \string
@@ -244,7 +278,7 @@ App.TabLiComponent = Em.Component.extend do
   active:(->
     @get \childViews .any-by \active
   ).property \childViews.@each.active
-  
+
 Em.Handlebars.helper \markdown ->
  if it
    new Em.Handlebars.SafeString marked it
