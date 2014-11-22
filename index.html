@@ -36,124 +36,153 @@
   a {
     cursor: pointer;
   }
-  .form-control {
-    font-size: 17px;
-  }
 </style>
 
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0/handlebars.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/emblem/0.3.18/emblem.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/ember.js/1.9.0-beta.1/ember.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/ember-data.js/1.0.0-beta.11/ember-data.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/ember-localstorage-adapter/0.3.1/localstorage_adapter.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/livescript/1.3.1/livescript-min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/marked/0.3.2/marked.min.js"></script>
 
-
-<script type="text/x-emblem" data-template-name="application">
-  .container-fluid
-    = outlet
+<script type="text/x-handlebars">
+  <div class="container-fluid">
+    {{outlet}}
+  </div>
 </script>
 
-<script type="text/x-emblem" data-template-name="newtask">
-  h1 New Task
-  form submit="create"
-    .form-group
-      label Title
-      = input class="form-control" valueBinding="title" required="required" autofocus="autofocus"
-    .form-group
-      label Project
-      = input class="form-control" valueBinding="project"
-    .form-group
-      label Description
-      = textarea class="form-control" valueBinding="description"
-    = input class="btn btn-primary btn-lg btn-block" type="submit" value="Create"
-    link-to "index" class="btn btn-default btn-lg btn-block" | Cancel
+<script type="text/x-handlebars" data-template-name="newtask">
+  <h1>New Task</h1>
+  <form {{action create on="submit"}}>
+    <div class="form-group">
+			<label>Title</label>
+			{{input class="form-control" value=title required="required" autofocus="autofocus"}}
+		</div>
+    <div class="form-group">
+			<label>Project</label>
+			{{input class="form-control" value=project}}
+		</div>
+		<div class="form-group">
+			<label>Description</label>
+			{{textarea class="form-control" value=description}}
+		</div>
+		{{input class="btn btn-primary btn-lg btn-block" type="submit" value="Create"}}
+		{{#link-to 'index' class="btn btn-default btn-lg btn-block"}}Cancel{{/link-to}}
+  </form>
 </script>
 
-<script type="text/x-emblem" data-template-name="todolist">
-  link-to "newtask" class="btn btn-primary btn-lg btn-block" | Create New Task
-  br
-  br
-  ul.nav.nav-tabs.nav-justified
-    tab-li
-      link-to 'todolist' 'inbox'
-        i.fa.fa-inbox.fa-lg
-        span Inbox
-    tab-li
-      link-to 'todolist' 'next'
-        i.fa.fa-exclamation-circle.fa-lg.text-primary
-        span Next Actions
-    tab-li
-      link-to 'todolist' 'waiting'
-        i.fa.fa-clock-o.fa-lg.text-warning
-        span Waiting For
-    tab-li
-      link-to 'todolist' 'maybe'
-        i.fa.fa-question-circle.fa-lg.text-info
-        span Maybe
-    tab-li
-      link-to 'todolist' 'done'
-        i.fa.fa-check-circle.fa-lg.text-success
-        span Done
-
-  ul.list-group
-    each
-      li.list-group-item id=id
-        h4.list-group-item-heading
-          = title
-          if project
-            span.badge
-              = project
-  
-          if inbox
-            a.pull-right.text-info click="move 'maybe'"
-              i.fa.fa-question-circle.fa-2x
-            a.pull-right.text-warning click="move 'waiting'"
-              i.fa.fa-clock-o.fa-2x
-            a.pull-right.text-primary click="move 'next'"
-              i.fa.fa-exclamation-circle.fa-2x
-  
-          if next
-            a.pull-right.text-success click="move 'done'"
-              i.fa.fa-check-circle.fa-2x
-            a.pull-right.text-info click="move 'maybe'"
-              i.fa.fa-question-circle.fa-2x
-            a.pull-right text-warning click="move 'waiting'"
-              i.fa.fa-clock-o.fa-2x
-  
-          if waiting
-            a.pull-right.text-success click="move 'done'"
-              i.fa.fa-check-circle.fa-2x
-            a.pull-right.text-info click="move 'maybe'"
-              i.fa.fa-question-circle.fa-2x
-            a.pull-right.text-primary click="move 'next'"
-              i.fa.fa-exclamation-circle.fa-2x
-  
-          if maybe
-            a.pull-right.text-danger click="move 'out'"
-              i.fa.fa-times-circle.fa-2x
-            a.pull-right.text-warning click="move 'waiting'"
-              i.fa.fa-clock-o.fa-2x
-            a.pull-right.text-primary click="move 'next'"
-              i.fa.fa-exclamation-circle.fa-2x
-  
-          if done
-            a.pull-right.text-danger click="move 'out'"
-              i.fa.fa-times-circle.fa-2x
-            a.pull-right.text-info click="move 'maybe'"
-              i.fa.fa-question-circle.fa-2x
-            a.pull-right.text-warning click="move 'waiting'"
-              i.fa.fa-clock-o.fa-2x
-            a.pull-right.text-primary click="move 'next'"
-              i.fa.fa-exclamation-circle.fa-2x
-        p.list-group-item-text
-          = markdown description
-    else
-      li.list-group-item
-        h4.list-group-item-heading
-          List Empty
+<script type="text/x-handlebars" data-template-name="todolist">
+  {{#link-to 'newtask' class="btn btn-primary btn-lg btn-block"}}Create New Task{{/link-to}}
+  <br><br>
+  <ul class="nav nav-tabs nav-justified">
+    {{#tab-li}}
+      {{#link-to 'todolist' 'inbox'}}
+        <i class="fa fa-inbox fa-lg"></i> Inbox
+      {{/link-to}}
+    {{/tab-li}}
+    {{#tab-li}}
+      {{#link-to 'todolist' 'next'}}
+        <i class="fa fa-exclamation-circle fa-lg text-primary"></i> Next Actions
+      {{/link-to}}
+    {{/tab-li}}
+    {{#tab-li}}
+      {{#link-to 'todolist' 'waiting'}}
+        <i class="fa fa-clock-o fa-lg text-warning"></i> Waiting For
+      {{/link-to}}
+    {{/tab-li}}
+    {{#tab-li}}
+      {{#link-to 'todolist' 'maybe'}}
+        <i class="fa fa-question-circle fa-lg text-info"></i> Maybe
+      {{/link-to}}
+    {{/tab-li}}
+    {{#tab-li}}
+      {{#link-to 'todolist' 'done'}}
+        <i class="fa fa-check-circle fa-lg text-success"></i> Done
+      {{/link-to}}
+    {{/tab-li}}
+  </ul>
+  <ul class="list-group">
+  {{#each}}
+    <li class="list-group-item" {{bind-attr id=id}}>
+      <h4 class="list-group-item-heading">
+        {{title}}
+        
+        {{#if project}}
+          <span class="badge">{{project}}</span>
+        {{/if}}
+        
+        {{#if inbox}}
+          <a class="pull-right text-info" {{action move 'maybe' this on="click"}}>
+            <i class="fa fa-question-circle fa-2x"></i>
+          </a>
+          <a class="pull-right text-warning" {{action move 'waiting' this on="click"}}>
+            <i class="fa fa-clock-o fa-2x"></i>
+          </a>
+          <a class="pull-right" {{action move 'next' this on="click"}}>
+            <i class="fa fa-exclamation-circle fa-2x"></i>
+          </a>
+        {{/if}}
+      
+        {{#if next}}
+          <a class="pull-right text-success" {{action move 'done' this on="click"}}>
+            <i class="fa fa-check-circle fa-2x"></i>
+          </a>
+          <a class="pull-right text-info" {{action move 'maybe' this on="click"}}>
+            <i class="fa fa-question-circle fa-2x"></i>
+          </a>
+          <a class="pull-right text-warning" {{action move 'waiting' this on="click"}}>
+            <i class="fa fa-clock-o fa-2x"></i>
+          </a>
+        {{/if}}
+        
+        {{#if waiting}}
+          <a class="pull-right text-success" {{action move 'done' this on="click"}}>
+            <i class="fa fa-check-circle fa-2x"></i>
+          </a>
+          <a class="pull-right text-info" {{action move 'maybe' this on="click"}}>
+            <i class="fa fa-question-circle fa-2x"></i>
+          </a>
+          <a class="pull-right" {{action move 'next' this on="click"}}>
+            <i class="fa fa-exclamation-circle fa-2x"></i>
+          </a>
+        {{/if}}
+        
+        {{#if maybe}}
+          <a class="pull-right text-danger" {{action move 'out' this on="click"}}>
+            <i class="fa fa-times-circle fa-2x"></i>
+          </a>
+          <a class="pull-right text-warning" {{action move 'waiting' this on="click"}}>
+            <i class="fa fa-clock-o fa-2x"></i>
+          </a>
+          <a class="pull-right" {{action move 'next' this on="click"}}>
+            <i class="fa fa-exclamation-circle fa-2x"></i>
+          </a>
+        {{/if}}
+        
+        {{#if done}}
+          <a class="pull-right text-danger" {{action move 'out' this on="click"}}>
+            <i class="fa fa-times-circle fa-2x"></i>
+          </a>
+          <a class="pull-right text-info" {{action move 'maybe' this on="click"}}>
+            <i class="fa fa-question-circle fa-2x"></i>
+          </a>
+          <a class="pull-right text-warning" {{action move 'waiting' this on="click"}}>
+            <i class="fa fa-clock-o fa-2x"></i>
+          </a>
+          <a class="pull-right" {{action move 'next' this on="click"}}>
+            <i class="fa fa-exclamation-circle fa-2x"></i>
+          </a>
+        {{/if}}
+      </h4>
+      <p class="list-group-item-text">{{markdown description}}</p>
+    </li>
+  {{else}}
+    <li class="list-group-item">
+      <h4 class="list-group-item-heading">List Empty</h4>
+    </li>
+  {{/each}}
+  </div>
 </script>
 
 <script type="text/ls">
