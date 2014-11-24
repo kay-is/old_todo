@@ -68,27 +68,27 @@
   <ul class="nav nav-tabs nav-justified">
     {{#tab-li}}
       {{#link-to 'todolist' 'inbox'}}
-        <i class="fa fa-inbox fa-lg"></i> Inbox
+        <i class="fa fa-inbox fa-lg"></i> Inbox <span class="badge">{{inboxCount}}</span>
       {{/link-to}}
     {{/tab-li}}
     {{#tab-li}}
       {{#link-to 'todolist' 'next'}}
-        <i class="fa fa-exclamation-circle fa-lg text-primary"></i> Next
+        <i class="fa fa-exclamation-circle fa-lg text-primary"></i> Next <span class="badge">{{nextCount}}</span>
       {{/link-to}}
     {{/tab-li}}
     {{#tab-li}}
       {{#link-to 'todolist' 'waiting'}}
-        <i class="fa fa-clock-o fa-lg text-warning"></i> Waiting
+        <i class="fa fa-clock-o fa-lg text-warning"></i> Waiting <span class="badge">{{waitingCount}}</span>
       {{/link-to}}
     {{/tab-li}}
     {{#tab-li}}
       {{#link-to 'todolist' 'maybe'}}
-        <i class="fa fa-question-circle fa-lg text-info"></i> Maybe
+        <i class="fa fa-question-circle fa-lg text-info"></i> Maybe <span class="badge">{{maybeCount}}</span>
       {{/link-to}}
     {{/tab-li}}
     {{#tab-li}}
       {{#link-to 'todolist' 'done'}}
-        <i class="fa fa-check-circle fa-lg text-success"></i> Done
+        <i class="fa fa-check-circle fa-lg text-success"></i> Done <span class="badge">{{doneCount}}</span>
       {{/link-to}}
     {{/tab-li}}
   </ul>
@@ -158,6 +158,18 @@ App.TodolistRoute = Em.Route.extend do
     @store.filter \todo, 'list':params.list, -> (it.get \list) is params.list
 
 App.TodolistController = Em.ArrayController.extend do
+  get-count:->
+    @store
+    .all \todo
+    .filter-by \list it 
+    .length
+
+  inbox-count:(-> @get-count \inbox).property \list
+  next-count:(-> @get-count \next).property \list
+  waiting-count:(-> @get-count \waiting).property \list
+  maybe-count:(-> @get-count \maybe).property \list
+  done-count:(-> @get-count \done).property \list
+
   actions:move:(target-list, task)->
     if target-list is \out
       task.delete-record!

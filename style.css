@@ -7,6 +7,11 @@
 .nav li {
   display:table-cell !important;
 }
+
+.nav .active {
+  background-color: #4e5d6c !important;
+}
+
 .list-group-item a i {
   margin-left: 20px;
   margin-top: -5px;
@@ -32,3 +37,4 @@ a {
 .edittask i {
   color: lightgrey;
 }
+
