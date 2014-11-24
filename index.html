@@ -164,11 +164,11 @@ App.TodolistController = Em.ArrayController.extend do
     .filter-by \list it 
     .length
 
-  inbox-count:(-> @get-count \inbox).property \list
-  next-count:(-> @get-count \next).property \list
-  waiting-count:(-> @get-count \waiting).property \list
-  maybe-count:(-> @get-count \maybe).property \list
-  done-count:(-> @get-count \done).property \list
+  inbox-count:(-> @get-count \inbox).property \@each.list
+  next-count:(-> @get-count \next).property \@each.list
+  waiting-count:(-> @get-count \waiting).property \@each.list
+  maybe-count:(-> @get-count \maybe).property \@each.list
+  done-count:(-> @get-count \done).property \@each.list
 
   actions:move:(target-list, task)->
     if target-list is \out
