@@ -1,0 +1,34 @@
+.container-fluid {
+  margin-top: 50px;
+  margin-right: auto;
+  margin-left: auto;
+  max-width: 750px;
+}
+.nav li {
+  display:table-cell !important;
+}
+.list-group-item a i {
+  margin-left: 20px;
+  margin-top: -5px;
+}
+.list-group-item > p {
+  width: 65%;
+}
+.list-group-item {
+  margin-bottom: 2px;
+}
+label, h1, h2, h3, h4 {
+  font-weight: bolder;
+}
+.badge {
+  background-color: #2b3e50;
+}
+a {
+  cursor: pointer;
+}
+.form-control {
+  font-size: 16px;
+}
+.edittask i {
+  color: lightgrey;
+}

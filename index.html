@@ -6,43 +6,7 @@
 
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.0/superhero/bootstrap.min.css" type="text/css" media="all" />
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.min.css" type="text/css" media="all" />
-
-<style>
-  .container-fluid {
-    margin-top: 50px;
-    margin-right: auto;
-    margin-left: auto;
-    max-width: 750px;
-  }
-  .nav li {
-    display:table-cell !important;
-  }
-  .list-group-item a i {
-    margin-left: 20px;
-    margin-top: -5px;
-  }
-  .list-group-item > p {
-    width: 65%;
-  }
-  .list-group-item {
-    margin-bottom: 2px;
-  }
-  label, h1, h2, h3, h4 {
-    font-weight: bolder;
-  }
-  .badge {
-    background-color: #2b3e50;
-  }
-  a {
-    cursor: pointer;
-  }
-  .form-control {
-    font-size: 16px;
-  }
-  .edittask i {
-    color: lightgrey;
-  }
-</style>
+<link rel="stylesheet" href="style.css" type="text/css" media="all" />
 
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0/handlebars.min.js"></script>
@@ -109,12 +73,12 @@
     {{/tab-li}}
     {{#tab-li}}
       {{#link-to 'todolist' 'next'}}
-        <i class="fa fa-exclamation-circle fa-lg text-primary"></i> Next Actions
+        <i class="fa fa-exclamation-circle fa-lg text-primary"></i> Next
       {{/link-to}}
     {{/tab-li}}
     {{#tab-li}}
       {{#link-to 'todolist' 'waiting'}}
-        <i class="fa fa-clock-o fa-lg text-warning"></i> Waiting For
+        <i class="fa fa-clock-o fa-lg text-warning"></i> Waiting
       {{/link-to}}
     {{/tab-li}}
     {{#tab-li}}
@@ -190,6 +154,7 @@ App.IndexRoute = Em.Route.extend do
 
 App.TodolistRoute = Em.Route.extend do
   model:(params)->
+    @store.find \todo
     @store.filter \todo, 'list':params.list, -> (it.get \list) is params.list
 
 App.TodolistController = Em.ArrayController.extend do
