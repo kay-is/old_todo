@@ -73,7 +73,7 @@
     {{/tab-li}}
     {{#tab-li}}
       {{#link-to 'todolist' 'next'}}
-        <i class="fa fa-exclamation-circle fa-lg text-primary"></i> Next <span class="badge">{{nextCount}}</span>
+        <i class="fa fa-exclamation-circle fa-lg text-info"></i> Next <span class="badge">{{nextCount}}</span>
       {{/link-to}}
     {{/tab-li}}
     {{#tab-li}}
@@ -83,7 +83,7 @@
     {{/tab-li}}
     {{#tab-li}}
       {{#link-to 'todolist' 'maybe'}}
-        <i class="fa fa-question-circle fa-lg text-info"></i> Maybe <span class="badge">{{maybeCount}}</span>
+        <i class="fa fa-question-circle fa-lg text-primary"></i> Maybe <span class="badge">{{maybeCount}}</span>
       {{/link-to}}
     {{/tab-li}}
     {{#tab-li}}
@@ -109,7 +109,7 @@
           </a>
         {{/if}}
         {{#if showMaybe}}
-          <a class="pull-right text-info" {{action move 'maybe' this on="click"}}>
+          <a class="pull-right text-primary" {{action move 'maybe' this on="click"}}>
             <i class="fa fa-question-circle fa-2x"></i>
           </a>
         {{/if}}
@@ -119,7 +119,7 @@
           </a>
         {{/if}}
         {{#if showNext}}
-          <a class="pull-right" {{action move 'next' this on="click"}}>
+          <a class="pull-right text-info" {{action move 'next' this on="click"}}>
             <i class="fa fa-exclamation-circle fa-2x"></i>
           </a>
         {{/if}}
