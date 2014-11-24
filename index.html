@@ -160,9 +160,10 @@ App.IndexRoute = Em.Route.extend do
     @transition-to \todolist \inbox
 
 App.TodolistRoute = Em.Route.extend do
-  model:(params)->
+  model:({list})->
+    document.title = 'Todo: ' + list.char-at 0 .to-upper-case! + list.substr 1 .to-lower-case!
     @store.find \todo
-    @store.filter \todo, 'list':params.list, -> (it.get \list) is params.list
+    @store.filter \todo, 'list':list, -> (it.get \list) is list
 
 App.TodolistController = Em.ArrayController.extend do
   get-count:->
