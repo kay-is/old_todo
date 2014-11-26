@@ -9,6 +9,7 @@
 <link rel="stylesheet" href="style.css" type="text/css" media="all" />
 
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.1/js/bootstrap.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0/handlebars.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/ember.js/1.9.0-beta.1/ember.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/ember-data.js/1.0.0-beta.11/ember-data.min.js"></script>
@@ -26,19 +27,29 @@
   <h1>New Task</h1>
   <form {{action create on="submit"}}>
     <div class="form-group">
-			<label>Title</label>
-			{{input class="form-control" value=title required="required" autofocus="autofocus"}}
-		</div>
+      <label>Title</label>
+      {{input class="form-control" value=title required="required" autofocus="autofocus"}}
+    </div>
     <div class="form-group">
-			<label>Project</label>
-			{{input class="form-control" value=project}}
-		</div>
-		<div class="form-group">
-			<label>Description</label>
-			{{textarea class="form-control" value=description}}
-		</div>
-		{{input class="btn btn-primary btn-lg btn-block" type="submit" value="Create"}}
-		{{#link-to 'index' class="btn btn-default btn-lg btn-block"}}Cancel{{/link-to}}
+      <label>Project</label>
+      <div class="input-group">
+        {{input class="form-control" value=project}}
+        <div class="input-group-btn">
+          <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-angle-down"></i></button>
+          <ul class="dropdown-menu dropdown-menu-right" role="menu">
+            {{#each controllers.todolist.projects}}
+              <li><a {{action setproject this on="click"}}>{{this}}</a></li>
+            {{/each}}
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Description</label>
+      {{textarea class="form-control" value=description}}
+    </div>
+    {{input class="btn btn-primary btn-lg btn-block" type="submit" value="Create"}}
+    {{#link-to 'index' class="btn btn-default btn-lg btn-block"}}Cancel{{/link-to}}
   </form>
 </script>
 
@@ -46,19 +57,29 @@
   <h1>Edit Task</h1>
   <form {{action save on="submit"}}>
     <div class="form-group">
-			<label>Title</label>
-			{{input class="form-control" value=title required="required" autofocus="autofocus"}}
-		</div>
+      <label>Title</label>
+      {{input class="form-control" value=title required="required" autofocus="autofocus"}}
+    </div>
     <div class="form-group">
-			<label>Project</label>
-			{{input class="form-control" value=project}}
-		</div>
-		<div class="form-group">
-			<label>Description</label>
-			{{textarea class="form-control" value=description}}
-		</div>
-		{{input class="btn btn-primary btn-lg btn-block" type="submit" value="Save"}}
-		{{#link-to 'index' class="btn btn-default btn-lg btn-block"}}Cancel{{/link-to}}
+      <label>Project</label>
+      <div class="input-group">
+        {{input class="form-control" value=project}}
+        <div class="input-group-btn">
+          <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-angle-down"></i></button>
+          <ul class="dropdown-menu dropdown-menu-right" role="menu">
+            {{#each controllers.todolist.projects}}
+              <li><a {{action setproject this on="click"}}>{{this}}</a></li>
+            {{/each}}
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Description</label>
+      {{textarea class="form-control" value=description}}
+    </div>
+    {{input class="btn btn-primary btn-lg btn-block" type="submit" value="Save"}}
+    <a class="btn btn-default btn-lg btn-block" {{action cancel on="click"}}>Cancel</a>
   </form>
 </script>
 

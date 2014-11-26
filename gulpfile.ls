@@ -13,7 +13,7 @@ destination = gulp~dest
 task \default ->
   source __dirname + '/src/app.ls'
   .pipe live-script!
-  .pipe uglify!
+  #.pipe uglify!
   .pipe destination '.'
 
   source __dirname + '/src/style.css'

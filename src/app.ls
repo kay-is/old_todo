@@ -8,6 +8,11 @@ App.Router.map !->
   @resource \edittask path:'/edit/:id'
   @route \newtask path:'/new'
 
+App.ApplicationRoute = Em.Route.extend do
+  init:!->
+    @_super ...
+    @store.find \todo
+
 App.IndexRoute = Em.Route.extend do
   before-model:->
     @transition-to \todolist \inbox
@@ -15,7 +20,6 @@ App.IndexRoute = Em.Route.extend do
 App.TodolistRoute = Em.Route.extend do
   model:({list})->
     document.title = 'Todo: ' + list.char-at 0 .to-upper-case! + list.substr 1 .to-lower-case!
-    @store.find \todo
     @store.filter \todo, 'list':list, -> (it.get \list) is list
 
 App.TodolistController = Em.ArrayController.extend do
@@ -31,6 +35,18 @@ App.TodolistController = Em.ArrayController.extend do
   maybe-count:(-> @get-count \maybe).property \@each.list
   done-count:(-> @get-count \done).property \@each.list
 
+  projects:(->
+    projects = {}
+
+    @store
+    .all \todo
+    .for-each !->
+      project = it.get \project
+      projects[project] = true if project 
+
+    Object.keys projects
+  ).property \@each.project
+
   actions:move:(target-list, task)->
     if target-list is \out
       task.delete-record!
@@ -39,23 +55,40 @@ App.TodolistController = Em.ArrayController.extend do
       task.set \list target-list .save!
 
 App.NewtaskController = Em.Controller.extend do
-  list:\inbox
-  actions:create:->
-    input = @get-properties <[title project list description dueBy]>
-    record = @store.create-record \todo input
-    record.save!
+  needs:<[todolist]>
 
-    @set \title ''
-    @set \project ''
-    @set \description ''
-  
-    @transition-to \index
+  list:\inbox
+
+  project:''
+
+  actions:
+    setproject:!-> @set \project it
+    create:!->
+      input = @get-properties <[title project list description dueBy]>
+
+      record = @store.create-record \todo input
+      record.save!
+
+      @set \title ''
+      @set \project ''
+      @set \description ''
+
+      @transition-to \index
 
 App.EdittaskController = Em.ObjectController.extend do
-  actions:save:->
-    record = @get \model
-    record.save!
-    @transition-to \todolist record.get \list
+  needs:<[todolist]>
+
+  actions:
+    setproject:!-> @set \project it
+    save:!->
+      record = @get \model
+      record.save!
+      @transition-to \todolist record.get \list
+    cancel:!->
+      record = @get \model
+      record.rollback!
+      @transition-to \todolist record.get \list
+      
 
 App.Todo = DS.Model.extend do
   'title': DS.attr \string
