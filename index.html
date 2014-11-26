@@ -29,14 +29,24 @@
   <form {{action create on="submit"}}>
     <div class="form-group">
       <label>Title</label>
-      {{input class="form-control" value=title required="required" autofocus="autofocus"}}
+      <div class="input-group">
+        {{input class="form-control" value=title required="required" autofocus="autofocus"}}
+        <div class="input-group-btn">
+          <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">Priority <i class="fa fa-angle-down"></i></button>
+          <ul class="dropdown-menu dropdown-menu-right" role="menu">
+            <li><a {{action setpriority 'low' on="click"}}>Low</a></li>
+            <li><a {{action setpriority 'medium' on="click"}}>Medium</a></li>
+            <li><a {{action setpriority 'high' on="click"}}>High</a></li>
+          </ul>
+        </div>
+      </div>
     </div>
     <div class="form-group">
       <label>Project</label>
       <div class="input-group">
         {{input class="form-control" value=project}}
         <div class="input-group-btn">
-          <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-angle-down"></i></button>
+          <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">Projects <i class="fa fa-angle-down"></i></button>
           <ul class="dropdown-menu dropdown-menu-right" role="menu">
             {{#each controllers.todolist.projects}}
               <li><a {{action setproject this on="click"}}>{{this}}</a></li>
@@ -58,15 +68,24 @@
   <h1>Edit Task</h1>
   <form {{action save on="submit"}}>
     <div class="form-group">
-      <label>Title</label>
-      {{input class="form-control" value=title required="required" autofocus="autofocus"}}
+      <label>Title</label><div class="input-group">
+        {{input class="form-control" value=title required="required" autofocus="autofocus"}}
+        <div class="input-group-btn">
+          <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">Priority <i class="fa fa-angle-down"></i></button>
+          <ul class="dropdown-menu dropdown-menu-right" role="menu">
+            <li><a {{action setpriority 'low' on="click"}}>Low</a></li>
+            <li><a {{action setpriority 'medium' on="click"}}>Medium</a></li>
+            <li><a {{action setpriority 'high' on="click"}}>High</a></li>
+          </ul>
+        </div>
+      </div>
     </div>
     <div class="form-group">
       <label>Project</label>
       <div class="input-group">
         {{input class="form-control" value=project}}
         <div class="input-group-btn">
-          <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-angle-down"></i></button>
+          <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">Projects <i class="fa fa-angle-down"></i></button>
           <ul class="dropdown-menu dropdown-menu-right" role="menu">
             {{#each controllers.todolist.projects}}
               <li><a {{action setproject this on="click"}}>{{this}}</a></li>

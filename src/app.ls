@@ -9,9 +9,7 @@ App.Router.map !->
   @route \newtask path:'/new'
 
 App.ApplicationRoute = Em.Route.extend do
-  init:!->
-    @_super ...
-    @store.find \todo
+  model:-> @store.find \todo
 
 App.IndexRoute = Em.Route.extend do
   before-model:->
@@ -21,6 +19,7 @@ App.TodolistRoute = Em.Route.extend do
   model:({list})->
     document.title = 'Todo: ' + list.char-at 0 .to-upper-case! + list.substr 1 .to-lower-case!
     @store.filter \todo, 'list':list, -> (it.get \list) is list
+
   after-model:!->
     document.title += ' (' + it.content.length + ')'
 
@@ -30,6 +29,19 @@ App.TodolistController = Em.ArrayController.extend do
     .all \todo
     .filter-by \list it 
     .length
+
+  sort-properties:<[priority]>
+  sort-function:(a,b)->
+    return 0 if a is b
+    if (@translate-priority a) > (@translate-priority b)
+      return -1
+    else
+      return 1
+
+  translate-priority:->
+    return 3 if it is 'high'
+    return 2 if it is 'medium'
+    return 1 if it is 'low'
 
   inbox-count:(-> @get-count \inbox).property \@each.list
   next-count:(-> @get-count \next).property \@each.list
@@ -62,11 +74,13 @@ App.NewtaskController = Em.Controller.extend do
   list:\inbox
 
   project:''
+  priority:\medium
 
   actions:
     setproject:!-> @set \project it
+    setpriority:!-> @set \priority it
     create:!->
-      input = @get-properties <[title project list description dueBy]>
+      input = @get-properties <[title project list priority description]>
 
       record = @store.create-record \todo input
       record.save!
@@ -82,6 +96,7 @@ App.EdittaskController = Em.ObjectController.extend do
 
   actions:
     setproject:!-> @set \project it
+    setpriority:!-> @set \priority it
     save:!->
       record = @get \model
       record.save!
@@ -90,14 +105,13 @@ App.EdittaskController = Em.ObjectController.extend do
       record = @get \model
       record.rollback!
       @transition-to \todolist record.get \list
-      
 
 App.Todo = DS.Model.extend do
   'title': DS.attr \string
   'description': DS.attr \string
   'project': DS.attr \string
   'list': DS.attr \string
-  'priority': DS.attr \string 'defaultValue':\low
+  'priority': DS.attr \string 'defaultValue':'medium'
 
   'highPriority':(-> (@get \priority) is \high).property \priority 
   'mediumPriority':(-> (@get \priority) is \medium).property \priority 
