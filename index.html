@@ -46,7 +46,7 @@
     </div>
     <div class="form-group">
       <label>Description</label>
-      {{textarea class="form-control" value=description}}
+      {{textarea class="form-control description" value=description placeholder="Describe this task (Markdown)"}}
     </div>
     {{input class="btn btn-primary btn-lg btn-block" type="submit" value="Create"}}
     {{#link-to 'index' class="btn btn-default btn-lg btn-block"}}Cancel{{/link-to}}
@@ -76,7 +76,7 @@
     </div>
     <div class="form-group">
       <label>Description</label>
-      {{textarea class="form-control" value=description}}
+      {{textarea class="form-control description" value=description placeholder="Describe this task (Markdown)"}}
     </div>
     {{input class="btn btn-primary btn-lg btn-block" type="submit" value="Save"}}
     <a class="btn btn-default btn-lg btn-block" {{action cancel on="click"}}>Cancel</a>

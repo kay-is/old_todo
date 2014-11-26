@@ -22,9 +22,18 @@
 .list-group-item {
   margin-bottom: 2px;
 }
-label, h1, h2, h3, h4 {
+h1, h2, h3, h4 {
   font-weight: bolder;
 }
+
+label {
+  font-size: 17px;
+}
+
+input {
+  font-weight: bolder;
+}
+
 .badge {
   background-color: #2b3e50;
 }
@@ -38,3 +47,7 @@ a {
   color: lightgrey;
 }
 
+.description {
+  height: 200px !important;
+  font-family:Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace;
+}
