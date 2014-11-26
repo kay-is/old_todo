@@ -14,9 +14,7 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/ember.js/1.9.0-beta.1/ember.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/ember-data.js/1.0.0-beta.11/ember-data.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/ember-localstorage-adapter/0.3.1/localstorage_adapter.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/livescript/1.3.1/livescript-min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/marked/0.3.2/marked.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/favico.js/0.3.4/favico.min.js"></script>
 
 <script type="text/x-handlebars">
   <div class="container-fluid">
@@ -31,6 +29,16 @@
       <label>Title</label>
       <div class="input-group">
         {{input class="form-control" value=title required="required" autofocus="autofocus"}}
+        <div class="input-group-btn">
+          <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">Period <i class="fa fa-angle-down"></i></button>
+          <ul class="dropdown-menu dropdown-menu-right" role="menu">
+            <li><a {{action setperiod 'low' on="click"}}>5 Minutes</a></li>
+            <li><a {{action setperiod 'low' on="click"}}>10 Minutes</a></li>
+            <li><a {{action setperiod 'medium' on="click"}}>30 Minutes</a></li>
+            <li><a {{action setperiod 'high' on="click"}}>1 Hour</a></li>
+            <li><a {{action setperiod 'high' on="click"}}>2 Hours</a></li>
+          </ul>
+        </div>
         <div class="input-group-btn">
           <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">Priority <i class="fa fa-angle-down"></i></button>
           <ul class="dropdown-menu dropdown-menu-right" role="menu">
