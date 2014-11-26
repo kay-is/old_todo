@@ -116,7 +116,7 @@
   </ul>
   <ul class="list-group">
   {{#each}}
-    <li class="list-group-item" {{bind-attr id=id}}>
+    <li {{bind-attr class=":list-group-item priority"}} {{bind-attr id=id}}>
       <h4 class="list-group-item-heading">
         {{title}}
         {{#if project}}<span class="badge">{{project}}</span>{{/if}}

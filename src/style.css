@@ -55,3 +55,15 @@ a {
 .dropdown-menu li a {
   font-size: 17px;
 }
+
+.low {
+  border-left: 10px solid #5bc0de;
+}
+
+.medium {
+  border-left: 10px solid #f0ad4e;
+}
+
+.high {
+  border-left: 10px solid #d9534f;
+}

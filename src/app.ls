@@ -97,6 +97,11 @@ App.Todo = DS.Model.extend do
   'description': DS.attr \string
   'project': DS.attr \string
   'list': DS.attr \string
+  'priority': DS.attr \string 'defaultValue':\low
+
+  'highPriority':(-> (@get \priority) is \high).property \priority 
+  'mediumPriority':(-> (@get \priority) is \medium).property \priority 
+  'lowPriority':(-> (@get \priority) is \low).property \priority 
 
   'showOut':(-> (@get \list) is \done).property \list
   'showNext':(-> (@get \list) isnt \next).property \list
