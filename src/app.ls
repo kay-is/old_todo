@@ -21,6 +21,8 @@ App.TodolistRoute = Em.Route.extend do
   model:({list})->
     document.title = 'Todo: ' + list.char-at 0 .to-upper-case! + list.substr 1 .to-lower-case!
     @store.filter \todo, 'list':list, -> (it.get \list) is list
+  after-model:!->
+    document.title += ' (' + it.content.length + ')'
 
 App.TodolistController = Em.ArrayController.extend do
   get-count:->
