@@ -51,3 +51,7 @@ a {
   height: 200px !important;
   font-family:Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace;
 }
+
+.dropdown-menu li a {
+  font-size: 17px;
+}
